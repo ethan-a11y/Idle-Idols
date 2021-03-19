@@ -1,0 +1,2 @@
+# Idle-Idols
+DIGITECH GAME
