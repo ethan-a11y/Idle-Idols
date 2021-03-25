@@ -21,15 +21,7 @@ class hpbar:
         arcade.draw_lrtb_rectangle_filled(550, 750-self.hpbardecline, 570, 510, arcade.color.GREEN)
         
 
-class attackText:
-    def __init__(self, attackNumber, isVisible, randx, randy):
-        self.attackNumber = attackNumber
-        self.x = randx
-        self.y = randy
-        self.isVisible = isVisible
-    def draw(self):
-        if self.isVisible:
-            arcade.draw_text(str(self.attackNumber), self.x, self.y, arcade.color.BLACK, 24)
+
         
 
 
@@ -41,6 +33,7 @@ class enemy:
         self.color = color
 
     def draw(self):
+        
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
         
 
@@ -60,8 +53,6 @@ class MyGame(arcade.Window):
         self.is_boss = False
         self.upgradeNames = [""]
         self.gameStarted = False
-        self.attackTextOnScreen = 0
-        self.attackText1 = attackText(1, True, round(random.randint(450, 850)), round(random.randint(250, 550)))
         
        # self.attackText2 = attackText(1, False)
        # self.attackText3 = attackText(1, False)
@@ -72,6 +63,31 @@ class MyGame(arcade.Window):
         # Set the background color
         
         arcade.set_background_color(arcade.color.DARK_BLUE)
+        self.upgradeButton1 = None
+        self.upgradeButton2 = None
+        self.upgradeButton3 = None
+        self.upgradeButton4 = None
+        self.upgradeButton5 = None
+        self.upgradeButton6 = None
+        self.upgradeButton7 = None
+        self.upgradeButton8 = None
+        self.upgradeButton9 = None
+        self.upgradeButton10 = None
+        self.upgradeButton11 = None
+        
+      
+        self.upgradeButtons = [self.upgradeButton1, self.upgradeButton2, self.upgradeButton3, self.upgradeButton4, self.upgradeButton5, self.upgradeButton6, self.upgradeButton7, self.upgradeButton8, self.upgradeButton9, self.upgradeButton10, self.upgradeButton11]
+        x = 0
+        for i in self.upgradeButtons:
+            x += 1
+            i = arcade.Sprite("upgrade.png")
+            i.width = 85
+            i.height = 25 + x *24
+            i.center_x = 250
+            i.center_y = 590
+            
+        
+        
         
        
 
@@ -79,12 +95,16 @@ class MyGame(arcade.Window):
         arcade.start_render()
         self.enemy.draw()
         self.hpbar.draw()
-        if self.gameStarted:
-            self.attackText1.draw()
+        
+        
+        
         self.gameStarted = True
         #UPGRADE MENU AND PLATFORM
         arcade.draw_rectangle_filled(650, 200, 400, 100, arcade.color.BLUE)
         arcade.draw_lrtb_rectangle_filled(0, 350, 750, 0, arcade.color.LIGHT_BROWN)
+    
+        for i in self.upgradeButtons:
+            print(i)
 
         #########UPGRADE MENU#########
 
@@ -114,9 +134,7 @@ class MyGame(arcade.Window):
                 self.hpbar = hpbar(200-self.hp*2)
                 self.hpbar.draw()
                 print("Hit on enemy", self.hp)
-                self.attackTextOnScreen += 1
-                self.attack1 = attackText(self.attack, True, round(random.randint(450, 850)), round(random.randint(250, 550)))
-                self.attack1.draw()
+                
                 
         
 
