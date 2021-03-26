@@ -63,28 +63,56 @@ class MyGame(arcade.Window):
         # Set the background color
         
         arcade.set_background_color(arcade.color.DARK_BLUE)
-        self.upgradeButton1 = None
-        self.upgradeButton2 = None
-        self.upgradeButton3 = None
-        self.upgradeButton4 = None
-        self.upgradeButton5 = None
-        self.upgradeButton6 = None
-        self.upgradeButton7 = None
-        self.upgradeButton8 = None
-        self.upgradeButton9 = None
-        self.upgradeButton10 = None
-        self.upgradeButton11 = None
+        self.upgradeButton1 = arcade.Sprite("upgrade.png")
+        self.upgradeButton2 = arcade.Sprite("upgrade.png")
+        self.upgradeButton3 = arcade.Sprite("upgrade.png")
+        self.upgradeButton4 = arcade.Sprite("upgrade.png")
+        self.upgradeButton5 = arcade.Sprite("upgrade.png")
+        self.upgradeButton6 = arcade.Sprite("upgrade.png")
+        self.upgradeButton7 = arcade.Sprite("upgrade.png")
+        self.upgradeButton8 = arcade.Sprite("upgrade.png")
+        self.upgradeButton9 = arcade.Sprite("upgrade.png")
+        self.upgradeButton10 = arcade.Sprite("upgrade.png")
+        self.upgradeButton11 = arcade.Sprite("upgrade.png")
+        self.upgradeButton12 = arcade.Sprite("upgrade.png")
+        self.upgradeButton13 = arcade.Sprite("upgrade.png")
+        self.upgradeButton14 = arcade.Sprite("upgrade.png")
+        self.upgradeButton15 = arcade.Sprite("upgrade.png")
+        self.upgradeButton16 = arcade.Sprite("upgrade.png")
+
         
-      
-        self.upgradeButtons = [self.upgradeButton1, self.upgradeButton2, self.upgradeButton3, self.upgradeButton4, self.upgradeButton5, self.upgradeButton6, self.upgradeButton7, self.upgradeButton8, self.upgradeButton9, self.upgradeButton10, self.upgradeButton11]
-        x = 0
-        for i in self.upgradeButtons:
-            x += 1
-            i = arcade.Sprite("upgrade.png")
-            i.width = 85
-            i.height = 25 + x *24
-            i.center_x = 250
-            i.center_y = 590
+        self.upgradeButtons = []
+        self.upgradeButtons.append(self.upgradeButton1)
+        self.upgradeButtons.append(self.upgradeButton2)
+        self.upgradeButtons.append(self.upgradeButton3)
+        self.upgradeButtons.append(self.upgradeButton4)
+        self.upgradeButtons.append(self.upgradeButton5)
+        self.upgradeButtons.append(self.upgradeButton6)
+        self.upgradeButtons.append(self.upgradeButton7)
+        self.upgradeButtons.append(self.upgradeButton8)
+        self.upgradeButtons.append(self.upgradeButton9)
+        self.upgradeButtons.append(self.upgradeButton10)
+        self.upgradeButtons.append(self.upgradeButton11)
+        self.upgradeButtons.append(self.upgradeButton12)
+        self.upgradeButtons.append(self.upgradeButton13)
+        self.upgradeButtons.append(self.upgradeButton14)
+        self.upgradeButtons.append(self.upgradeButton15)        
+        self.upgradeButtons.append(self.upgradeButton16)
+
+
+        for i in range(16):
+            
+    
+            
+            
+
+            self.upgradeButtons[i].width = 85
+            
+            self.upgradeButtons[i].height = 25
+            self.upgradeButtons[i].center_x = 250
+            self.upgradeButtons[i].center_y = 591 - i * 37
+            
+        print(self.upgradeButton1.width)
             
         
         
@@ -104,7 +132,7 @@ class MyGame(arcade.Window):
         arcade.draw_lrtb_rectangle_filled(0, 350, 750, 0, arcade.color.LIGHT_BROWN)
     
         for i in self.upgradeButtons:
-            print(i)
+            i.draw()
 
         #########UPGRADE MENU#########
 
@@ -115,7 +143,7 @@ class MyGame(arcade.Window):
         #UPGRADE
 
         for i in range(16):
-            arcade.draw_text("UPGRADE " + str(i), 50, 580-i*34, arcade.color.BLACK, 12)
+            arcade.draw_text("UPGRADE " + str(i+1), 50, 580-i*37, arcade.color.BLACK, 12)
             
         
 
