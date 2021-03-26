@@ -43,10 +43,10 @@ class MyGame(arcade.Window):
         # Call the parent class initializer
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprites With Walls Example")
         self.hp = 100
-        self.coins = 1000000000
+        self.coins = 5
         self.enemy = enemy(650, 350, 100, arcade.color.BLUE, self.hp)
         self.hpbar = hpbar(200-self.hp*2)
-        self.attack = 1
+        self.attack = 10
         self.enemydefense = 0
         self.bossregen = 1
         self.is_boss = False
@@ -109,6 +109,9 @@ class MyGame(arcade.Window):
             
             
         print(self.upgradeButton1.width)
+
+        self.coinText = arcade.draw_text("Coins: 5", 395, 700, arcade.color.BLACK, 20)
+        self.coinText.bold = True
         
       
 
@@ -121,6 +124,9 @@ class MyGame(arcade.Window):
         arcade.start_render()
         self.enemy.draw()
         self.hpbar.draw()
+        #print(self.coinText.text)
+        self.coinText.draw()
+
         
         
         
@@ -161,6 +167,8 @@ class MyGame(arcade.Window):
                     self.hp = 100
                     self.hpbar = hpbar(200-self.hp*2)
                     self.coins += 2
+                    self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
+                    
                     print("coins: " + str(self.coins))
                 else:
                     self.hp -= self.attack
@@ -177,6 +185,7 @@ class MyGame(arcade.Window):
                         print("Upgrade " + str(i+1) + " Purchased", "You have " + str(self.coins) + " left", "Your attack power is " + str(self.attack))
                     else:
                         print("You do not have the funds for this sir")
+                self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
         
                 
                 
