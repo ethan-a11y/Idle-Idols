@@ -104,8 +104,11 @@ class MyGame(arcade.Window):
             self.upgradeButtons[i].center_x = 250
             self.upgradeButtons[i].center_y = 591 - i * 37
             
-        print(self.upgradeButton1.width)
             
+        print(self.upgradeButton1.width)
+        
+      
+
         
         
         
@@ -137,6 +140,7 @@ class MyGame(arcade.Window):
         for i in range(16):
             arcade.draw_text("UPGRADE " + str(i+1), 50, 580-i*37, arcade.color.BLACK, 12)
             
+            
         
 
         
@@ -154,6 +158,10 @@ class MyGame(arcade.Window):
                 self.hpbar = hpbar(200-self.hp*2)
                 self.hpbar.draw()
                 print("Hit on enemy", self.hp)
+            for i in range(16):
+                if x >= 210 and x <= 290 and y >= 580 - i*37 and y <= 600 - i*37:
+                    print("Upgrade " + str(i+1) + " Purchased")
+        
                 
                 
         
