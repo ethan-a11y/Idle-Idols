@@ -43,6 +43,7 @@ class MyGame(arcade.Window):
         # Call the parent class initializer
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprites With Walls Example")
         self.hp = 100
+        self.coins = 1000000000
         self.enemy = enemy(650, 350, 100, arcade.color.BLUE, self.hp)
         self.hpbar = hpbar(200-self.hp*2)
         self.attack = 1
@@ -51,6 +52,8 @@ class MyGame(arcade.Window):
         self.is_boss = False
         self.upgradeNames = [""]
         self.gameStarted = False
+        self.upgradeCostList = [10, 20, 50, 100, 150, 200, 350, 600, 750, 1000, 1500, 2500, 4000, 10000, 50000, 250000]
+        self.upgradeAttackBuffList = [1, 2, 4, 8, 16, 32, 64, 125, 250, 500, 1000, 2000, 2500, 3000, 3500, 5000]
         
        # self.attackText2 = attackText(1, False)
        # self.attackText3 = attackText(1, False)
@@ -154,13 +157,26 @@ class MyGame(arcade.Window):
         if button == arcade.MOUSE_BUTTON_LEFT:
             print("Left mouse button pressed at", x, y)
             if(x >= 550 and x <= 750 and y >= 250 and y <= 450):
-                self.hp -= self.attack
-                self.hpbar = hpbar(200-self.hp*2)
+                if self.attack >= self.hp:
+                    self.hp = 100
+                    self.hpbar = hpbar(200-self.hp*2)
+                    self.coins += 2
+                    print("coins: " + str(self.coins))
+                else:
+                    self.hp -= self.attack
+                    self.hpbar = hpbar(200-self.hp*2)
+                
                 self.hpbar.draw()
                 print("Hit on enemy", self.hp)
             for i in range(16):
                 if x >= 210 and x <= 290 and y >= 580 - i*37 and y <= 600 - i*37:
-                    print("Upgrade " + str(i+1) + " Purchased")
+                    if self.coins >= self.upgradeCostList[i]:
+                        self.coins -= self.upgradeCostList[i]
+                        self.attack += self.upgradeAttackBuffList[i]
+
+                        print("Upgrade " + str(i+1) + " Purchased", "You have " + str(self.coins) + " left", "Your attack power is " + str(self.attack))
+                    else:
+                        print("You do not have the funds for this sir")
         
                 
                 
