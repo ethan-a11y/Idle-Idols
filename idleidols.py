@@ -35,8 +35,6 @@ class enemy:
     def draw(self):
         
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
-        
-
 
 class MyGame(arcade.Window):
 
@@ -101,13 +99,7 @@ class MyGame(arcade.Window):
 
 
         for i in range(16):
-            
-    
-            
-            
-
-            self.upgradeButtons[i].width = 85
-            
+            self.upgradeButtons[i].width = 85        
             self.upgradeButtons[i].height = 25
             self.upgradeButtons[i].center_x = 250
             self.upgradeButtons[i].center_y = 591 - i * 37
