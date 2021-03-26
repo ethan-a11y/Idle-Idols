@@ -43,7 +43,7 @@ class MyGame(arcade.Window):
         # Call the parent class initializer
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprites With Walls Example")
         self.hp = 100
-        self.coins = 5
+        self.coins = 500000000
         self.enemy = enemy(650, 350, 100, arcade.color.BLUE, self.hp)
         self.hpbar = hpbar(200-self.hp*2)
         self.attack = 10
@@ -180,12 +180,13 @@ class MyGame(arcade.Window):
                 if x >= 210 and x <= 290 and y >= 580 - i*37 and y <= 600 - i*37:
                     if self.coins >= self.upgradeCostList[i]:
                         self.coins -= self.upgradeCostList[i]
+                        self.upgradeCostList[i] *= 1 + i * (0.1/i)
                         self.attack += self.upgradeAttackBuffList[i]
 
                         print("Upgrade " + str(i+1) + " Purchased", "You have " + str(self.coins) + " left", "Your attack power is " + str(self.attack))
                     else:
                         print("You do not have the funds for this sir")
-                self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
+                self.coinText = arcade.draw_text("Coins: " + str(round(self.coins)), 395, 700, arcade.color.BLACK, 20)
         
                 
                 
