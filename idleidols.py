@@ -1,6 +1,7 @@
 import arcade
 import random
 import time
+import threading
 
 # --- Constants ---
 
@@ -37,6 +38,8 @@ class enemy:
         
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
 
+
+
 class MyGame(arcade.Window):
 
     def __init__(self):
@@ -48,14 +51,15 @@ class MyGame(arcade.Window):
         self.coins = 500000000
         self.enemy = enemy(650, 350, 100, arcade.color.BLUE, self.hp)
         self.hpbar = hpbar(200-self.hp/self.baseHp*200)
-        self.coinsAdded = arcade.draw_text("+ 0", 488, 700, arcade.color.YELLOW, 20)
+        self.coinsAdded = arcade.draw_text("+ 0", 600, 700, arcade.color.YELLOW, 20)
         self.attack = 50        
         self.wave = 1
-        self.level = 1
+        self.level = 8
         self.levelWave = arcade.draw_text("Level " + str(self.level) + ", Wave (" + str(self.wave) + "/5)", 545, 604, arcade.color.BLACK, 20)
         self.enemydefense = 0
         self.bossregen = 1
         self.is_boss = False
+        self.bossHp = 2500
         self.upgradeNames = [""]
         self.gameStarted = False
         
@@ -125,7 +129,7 @@ class MyGame(arcade.Window):
             
         print(self.upgradeButton1.width)
 
-        self.coinText = arcade.draw_text("Coins: 5", 395, 700, arcade.color.BLACK, 20)
+        self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
         self.coinText.bold = True
 
     
@@ -177,8 +181,8 @@ class MyGame(arcade.Window):
             
         
 
+    
         
-
 
         #arcade.draw_rectangle_outline(650, 540, 200, 60, arcade.color.BLACK, 12, 0)
         
@@ -192,9 +196,12 @@ class MyGame(arcade.Window):
                 #Will respawn a new enemy if the attack is more than the remaining health of the enemy; this stops errors with the HP bar because the width can't go below zero
                 if self.attack >= self.hp:
                     self.hp = self.baseHp
-                    self.hpbar = hpbar(200-self.hp/self.baseHp*200)
+                    if self.level % 10 == 0:
+                        self.hpbar = hpbar(200-self.hp/self.bossHp*200)
+                    else:
+                        self.hpbar = hpbar(200-self.hp/self.baseHp*200)
                     self.coins += 2
-                    self.coinsAdded = arcade.draw_text("+ " + str(2), 488, 700, arcade.color.YELLOW, 20)
+                    self.coinsAdded = arcade.draw_text("+ " + str(2), 600, 700, arcade.color.YELLOW, 20)
                     self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
                     
                     print("coins: " + str(self.coins))
@@ -202,16 +209,39 @@ class MyGame(arcade.Window):
                     #### Wave goes up by one every time you kill an enemy, new level every 5 waves ####
                     if self.wave < 5:
                         self.wave += 1
+                        #### !IMPORTANT NOTEE! I CHANGE THE TEXT IN THIS FUNCTION INSTEAD OF THE ON_DRAW FUNCTION BECAUSE I THINK IT IS LESS CPU DEMANDING AS YOU ARE NOT RUNNING IT 80 TIMES A SECOND ####
                         self.levelWave = arcade.draw_text("Level " + str(self.level) + ", Wave (" + str(self.wave) + "/5)", 545, 604, arcade.color.BLACK, 20)
                     else:
                         self.level += 1
-                        self.wave = 1
-                        self.levelWave = arcade.draw_text("Level " + str(self.level) + ", Wave (" + str(self.wave) + "/5)", 545, 604, arcade.color.BLACK, 20)
+                        if self.level % 10 == 0:
+                            self.is_boss = True
+                            self.bossHp = self.level/10 * 2500 * self.level/10
+                            self.hp = self.bossHp
+                            self.hpbar = hpbar(200-self.hp/self.bossHp*200)
+                            
+                        else:
+
+                            self.wave = 1
+                            
+                            self.baseHp *= (1.1 + round(self.level % 5) /10 * 0.2)
+                            self.hp = round(self.baseHp)
+                            self.hpbar = hpbar(200-self.hp/self.baseHp*200)
+                            self.levelWave = arcade.draw_text("Level " + str(self.level) + ", Wave (" + str(self.wave) + "/5)", 545, 604, arcade.color.BLACK, 20)
+                            #### Error must be fixed ####
+                            """def gfg():
+                                print("Worked")
+  
+                            timer = threading.Timer(2.0, gfg)
+                            timer.start()"""
                     
                 #### TAKES A WAY HEALTH ON HP VARIABLE AND THE HP BAR USING A SPECIAL ALGORITHM    
                 else:
                     self.hp -= self.attack
-                    self.hpbar = hpbar(200-self.hp/self.baseHp*200)
+                    #### Width of HP bar is 200 pixels, therfore to workout how much of the bar is remaining, you need to convert the remaining hp as a percentage of the base hp (which will create 100 pixels of data) then multiply by 2 to get the doubled percentage and therfore the amount of pixels to fill the hp bar by
+                    if self.level % 10 == 0:
+                        self.hpbar = hpbar(200-self.hp/self.bossHp*200)
+                    else:
+                        self.hpbar = hpbar(200-self.hp/self.baseHp*200)
                     self.hpbar.draw()
                 
                 
