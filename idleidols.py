@@ -119,7 +119,7 @@ class MyGame(arcade.Window):
         for i in range(16):
             self.upgradeButtons[i].width = 85        
             self.upgradeButtons[i].height = 25
-            self.upgradeButtons[i].center_x = 250
+            self.upgradeButtons[i].center_x = 200
             self.upgradeButtons[i].center_y = 591 - i * 37
             
             
@@ -172,6 +172,7 @@ class MyGame(arcade.Window):
 
         for i in range(16):
             arcade.draw_text("UPGRADE " + str(i+1), 50, 580-i*37, arcade.color.BLACK, 12)
+            arcade.draw_text("COST " + str(round(self.upgradeCostList[i])), 280, 585-i*37, arcade.color.BLACK, 12)
             
             
         
@@ -218,11 +219,16 @@ class MyGame(arcade.Window):
 
             #### This loop checks to see if the user has hit one of the upgrade buttons and if so which one, using the i operator to decipher the y co-ordinate and therfore which button
             for i in range(16):
-                if x >= 210 and x <= 290 and y >= 580 - i*37 and y <= 600 - i*37:
+                if x >= 160 and x <= 240 and y >= 580 - i*37 and y <= 600 - i*37:
                     #### Uses lists as an easy way to set costs and buffs ####
                     if self.coins >= self.upgradeCostList[i]:
                         self.coins -= self.upgradeCostList[i]
-                        self.upgradeCostList[i] *= 1 + i * (0.1/i)
+                        #### Fixing can't divide by zero error ####
+                        if i != 0:
+                            #### Algorithm creates exponential growth for the upgrades to ensure a more challenging game, exponent increases as the upgrades get higher ####
+                            self.upgradeCostList[i] *= 1 + i * (0.15/i)
+                        else:
+                            self.upgradeCostList[i] *= 1.1
                         self.attack += self.upgradeAttackBuffList[i]
 
                         print("Upgrade " + str(i+1) + " Purchased", "You have " + str(self.coins) + " left", "Your attack power is " + str(self.attack))
