@@ -5,11 +5,12 @@ import threading
 
 # --- Constants ---
 
-
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 750
 
 #650, 350, 100, arcade.color.BLUE
+
+game_view = None
 
 class hpbar:
     def __init__(self, hpbardecline):
@@ -22,11 +23,6 @@ class hpbar:
         arcade.draw_lrtb_rectangle_filled(550, 750, 570, 510, arcade.color.RED)
         arcade.draw_lrtb_rectangle_filled(550, 750-self.hpbardecline, 570, 510, arcade.color.GREEN)
         
-
-
-
-
-
 class enemy:
     def __init__(self, position_x, position_y, radius, color, hp):
         self.position_x = position_x
@@ -38,14 +34,32 @@ class enemy:
         
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
 
+class StartView(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
 
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Idle Idols", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=35, anchor_x="center")
+        arcade.draw_text("Click to play", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75, arcade.color.WHITE, font_size=15, anchor_x="center")
 
-class MyGame(arcade.Window):
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        global game_view
+        # CLICK MOUSE TO START GAME 
+        start_view = StartView()
+        game_view = GameView()
+        game_view.setup()
+        self.window.show_view(game_view)
 
+    def setup(self):
+        print('Game view setup')
+
+class GameView(arcade.View):
     def __init__(self):
         """ Initializer """
         # Call the parent class initializer
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Sprites With Walls Example")
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "Idle Idols")
         self.baseHp = 400
         self.hp = self.baseHp
         self.coins = 500000000
@@ -66,18 +80,11 @@ class MyGame(arcade.Window):
         self.upgradeCostList = [10, 20, 50, 100, 150, 200, 350, 600, 750, 1000, 1500, 2500, 4000, 10000, 50000, 250000]
         self.upgradeAttackBuffList = [1, 2, 4, 8, 16, 32, 64, 125, 250, 500, 1000, 2000, 2500, 3000, 3500, 5000]
         
-
         #DPS Timer
         
-
-
        # self.attackText2 = attackText(1, False)
        # self.attackText3 = attackText(1, False)
         
-
-    
-    
-
     def setup(self):
         # Set the background color
         
@@ -126,23 +133,10 @@ class MyGame(arcade.Window):
             self.upgradeButtons[i].center_x = 200
             self.upgradeButtons[i].center_y = 591 - i * 37
             
-            
         print(self.upgradeButton1.width)
 
         self.coinText = arcade.draw_text("Coins: " + str(self.coins), 395, 700, arcade.color.BLACK, 20)
         self.coinText.bold = True
-
-    
-  
-
-
-      
-
-        
-        
-        
-    
-    
 
     def on_draw(self):
         arcade.start_render()
@@ -153,11 +147,6 @@ class MyGame(arcade.Window):
         self.coinsAdded.draw()
         self.levelWave.draw()
 
-        
-
-        
-        
-        
         self.gameStarted = True
         #UPGRADE MENU AND PLATFORM
         arcade.draw_rectangle_filled(650, 200, 400, 100, arcade.color.BLUE)
@@ -171,19 +160,12 @@ class MyGame(arcade.Window):
         #Title
         arcade.draw_text("UPGRADES", 85, 680, arcade.color.BLACK, 24)
 
-
         #UPGRADE
 
         for i in range(16):
             arcade.draw_text("UPGRADE " + str(i+1), 50, 580-i*37, arcade.color.BLACK, 12)
             arcade.draw_text("COST " + str(round(self.upgradeCostList[i])), 280, 585-i*37, arcade.color.BLACK, 12)
             
-            
-        
-
-    
-        
-
         #arcade.draw_rectangle_outline(650, 540, 200, 60, arcade.color.BLACK, 12, 0)
         
         #arcade.draw_rectangle_filled(650, 540, 150, 60, arcade.color.GREEN)
@@ -266,18 +248,25 @@ class MyGame(arcade.Window):
                         print("You do not have the funds for this sir")
                 self.coinText = arcade.draw_text("Coins: " + str(round(self.coins)), 395, 700, arcade.color.BLACK, 20)
         
-                
-                
-        
+class PauseView(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
 
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Paused", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=35, anchor_x="center")
+        arcade.draw_text("Click to Resume", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75, arcade.color.WHITE, font_size=15, anchor_x="center")
 
+    def setup(self):
+        print('Game view setup')
 
 def main():
-    window = MyGame()
-    window.setup()
-
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Idle Idols")
+    start_view = StartView()
+    window.show_view(start_view)
+    start_view.setup()
     arcade.run()
-
 
 if __name__ == "__main__":
     main()
